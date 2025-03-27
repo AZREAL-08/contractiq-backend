@@ -1,0 +1,2 @@
+.tables
+SELECT * FROM User;

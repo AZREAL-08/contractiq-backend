@@ -6,33 +6,22 @@ import extract
 from process import process_file_content
 from firebase_admin import credentials, firestore, auth
 import firebase_admin
+from process_files.process import gemini_call
+
+
 cred = credentials.Certificate("firebase_credentials.json")
 firebase_app = firebase_admin.initialize_app(cred)
 if not firebase_admin._apps:
     print("Firebase not Initialized!")
 db = firestore.client()
+
 app = Flask(__name__)
 app.secret_key = 'ac5ab744684a0585c7bde4a3285057468440df322d09c61f6986621d62301f3f'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
-
-
-# User Model
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), nullable=False, unique=True)
-    password = db.Column(db.String(200), nullable=False)
-
-
-# Initialize the database
-with app.app_context():
-    db.create_all()
 
 
 # Home Route
@@ -47,22 +36,24 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+        email = request.form['email']
+        password = request.form['password']
 
-        # Check if user already exists
-        if User.query.filter_by(username=username).first():
-            flash('Username already exists. Please choose another.', 'error')
-            return redirect(url_for('register'))
+        try:
+            # Create user in Firebase Auth
+            user = auth.create_user(email=email, password=password)
+            session['user_email'] = email
 
-        # Hash password and save to database
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        new_user = User(username=username, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
+            # Save user data to Firestore
+            db.collection('users').document(user.uid).set({
+                'email': email,
+                'uid': user.uid
+            })
 
-        flash('Account created successfully! Please log in.', 'success')
-        return redirect(url_for('login'))
+            flash('Registration successful! Please log in.', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            flash(f"Registration failed: {e}", "danger")
 
     return render_template('register.html')
 
@@ -71,20 +62,14 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        remember = request.form.get('remember') == 'on'
-
-        # Authenticate User
-        user = User.query.filter_by(username=username).first()
-        if user and bcrypt.check_password_hash(user.password, password):
-            session['username'] = username
-            if remember:
-                session.permanent = True
-            flash('Login successful!', 'success')
+        email = request.form['email']
+        try:
+            user = auth.get_user_by_email(email)
+            session['user_id'] = user.uid
+            session['user_email'] = email
             return redirect(url_for('upload'))
-        else:
-            flash('Invalid username or password.', 'error')
+        except Exception as e:
+            flash(f"Login failed: {e}", "danger")
 
     return render_template('login.html')
 
@@ -92,7 +77,7 @@ def login():
 # Logout Route
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    session.clear()
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
@@ -100,7 +85,7 @@ def logout():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     # Check if user is logged in
-    username = session.get('username')
+    username = session.get('user_id')
     if not username:
         flash('Please log in to upload files.', 'error')
         return redirect(url_for('login'))
@@ -131,13 +116,13 @@ def upload():
         if not extracted_contents:
             flash('No valid files to process.', 'error')
             return redirect(request.url)
-
         # Return extracted data for now
-        return jsonify({"extracted_data": extracted_contents})
+        data = gemini_call(extracted_contents)
+        return data
 
     return render_template('upload.html')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
 

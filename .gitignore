@@ -2,7 +2,8 @@
 CUAD_v1.json
 firebase_credentials.json
 .git
-env
 __pycache__
 instance
 uploads
+.env
+old

@@ -5,6 +5,7 @@ import json
 from datetime import datetime, date
 from pydantic import BaseModel, Field, ValidationError, field_validator
 from typing import List, Dict, Optional
+from extract_service import extract_data
 
 
 def extract_text(loc):
@@ -72,8 +73,10 @@ class LicenseAgreementExtractor:
 
 EXTRACTION INSTRUCTIONS:
 - Extract precise, concise information for each specified category.
-- If information is not found, use "N/A".
+- If information is not found, use "N/A", refrain from returning Null.
 - Ensure JSON output is clean and standardized.
+- Try to fill in the gaps if any from inference
+- Reread your output to make sense or find gaps
 
 EXTRACTION CATEGORIES:
 1. PARTIES INVOLVED
@@ -133,6 +136,7 @@ CONTRACT TEXT TO ANALYZE:
             response = self.model.generate_content(prompt)
             raw_output = response.text.strip()
             cleaned_output = self.clean_response(raw_output)
+            print(cleaned_output)
             # Attempt to parse the cleaned output as JSON
             extracted_json = json.loads(cleaned_output)
             # Validate the extracted JSON using the Pydantic schema
@@ -143,8 +147,9 @@ CONTRACT TEXT TO ANALYZE:
             print("Raw Model Response:", raw_output)
             return None
         except ValidationError as ve:
-            print("Validation Error:", ve.model_dump_json(indent=2))
+            print("Validation Error:", ve.json(indent=2))
             return None
+
 
     def save_to_json(self, data: Dict, filename: str = 'license_agreement_details.json'):
         """
@@ -171,11 +176,8 @@ def gemini_call(contract_text):
     if extracted_details:
         return  extracted_details
 
-def extract_data(loc):
-    contract_text = extract_text(loc)
-    extracted_data = gemini_call(contract_text)
-    print(extracted_data)
-    return extracted_data
 
 if __name__ == '__main__':
-    extract_data('docs/DIGITAL LICENSING AGREEMENT.pdf')
+    file = open('/nikhil/contractiq-backend/uploads/XACCT Technologies, Inc.SUPPORT AND MAINTENANCE AGREEMENT.txt', "r")
+    data = file.read()
+    res = gemini_call(data)

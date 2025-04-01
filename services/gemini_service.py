@@ -5,7 +5,7 @@ import json
 from datetime import datetime, date
 from pydantic import BaseModel, Field, ValidationError, field_validator
 from typing import List, Dict, Optional
-from extract_service import extract_data
+from services.extract_service import extract_data
 
 
 def extract_text(loc):

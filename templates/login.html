@@ -7,8 +7,15 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <div class="container">
-    <h1>Login</h1>
+  
+  <!-- Video Background -->
+  <video autoplay loop muted playsinline id="bg-video">
+    <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="login container">
+    <h1 class="login-tittle">Login</h1>
 
     <!-- Display flash messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -32,10 +39,15 @@
         <input type="checkbox" name="remember"> Remember Me
       </label>
 
-      <button type="submit">Login</button>
+      <button type="submit">
+        Login
+        <img src="{{ url_for('static', filename='image.png') }}" alt="Login Icon" class="btn-icon" />
+      </button>
+      
     </form>
 
     <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a>.</p>
   </div>
+
 </body>
 </html>

@@ -9,6 +9,7 @@ def register():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        name = request.form['name']
 
         try:
             user = auth.create_user(email=email, password=password)
@@ -16,7 +17,8 @@ def register():
             # Save user to Firestore
             db.collection('users').document(user.uid).set({
                 'email': email,
-                'uid': user.uid
+                'uid': user.uid,
+                'name': name
             })
             flash('Registration successful! Please log in.', 'success')
             return redirect(url_for('auth.login'))
@@ -30,8 +32,10 @@ def login():
         email = request.form['email']
         try:
             user = auth.get_user_by_email(email)
+            name = db.collection('users').document(user.uid).get().get('name')
             session['user_id'] = user.uid
             session['user_email'] = email
+            session['name'] = name
             return redirect(url_for('dashboard.dashboard'))
         except Exception as e:
             flash(f"Login failed: {e}", "danger")

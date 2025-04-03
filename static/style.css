@@ -154,6 +154,7 @@ form button:hover {
     padding: 1rem;
     width: calc(50% - 1.5rem); /* Adjust width as needed */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex-grow: 1;
 }
 
 .card h3 {

@@ -50,8 +50,8 @@ class LicenseAgreementExtractor:
     def __init__(self, api_key: str):
         # Configure the API key for your generative model service
         genai.configure(api_key=api_key)
-        # Use an appropriate model (using gemini-1.5-pro here)
-        self.model = genai.GenerativeModel("gemini-1.5-pro")
+        # Use an appropriate model (using gemini-1.5-flash here)
+        self.model = genai.GenerativeModel("gemini-1.5-flash")
     
     def clean_response(self, text: str) -> str:
         """
@@ -77,6 +77,7 @@ EXTRACTION INSTRUCTIONS:
 - Ensure JSON output is clean and standardized.
 - Try to fill in the gaps if any from inference
 - Reread your output to make sense or find gaps
+- Strictly adhere to this format no matter what.
 
 EXTRACTION CATEGORIES:
 1. PARTIES INVOLVED

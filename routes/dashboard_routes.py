@@ -40,7 +40,8 @@ def dashboard():
         data = gemini_call(extracted_contents)
         # Save processed data to Firestore under user's documents subcollection
         collection_path = f'users/{user_id}/documents'
-        db.collection(collection_path).add(data)
+        if data:
+            db.collection(collection_path).add(data)
         flash("File(s) processed and data saved successfully.", "success")
         return redirect(url_for('dashboard.dashboard'))
 

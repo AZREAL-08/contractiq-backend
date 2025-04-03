@@ -3,17 +3,31 @@
 
 {% block content %}
 <div class="dashboard-container">
-    <h1>Welcome, {{ session['user_email'] }}</h1>
-    <p class="info">Allowed file types: <strong>PDF, DOCX, TXT</strong></p>
+    <h1>Welcome, {{ session['name'] or session['user_email'] }}</h1>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <h2>About This Platform</h2>
+        <p>
+            This platform streamlines the process of managing digital content licensing agreements.
+            Upload your licensing contracts to extract structured details automatically.
+            View, track, and manage your intellectual property rights with ease.
+        </p>
+    </section>
 
     <!-- File Upload Section -->
     <section class="upload-section">
-        <form action="{{ url_for('dashboard.dashboard') }}" method="post" enctype="multipart/form-data">
-            <label for="file" class="file-label">Choose Files:</label>
-            <input type="file" id="file" name="file" accept=".pdf, .docx, .txt" multiple required class="file-input">
+        <h2>Upload Your File</h2>
+        <form action="{{ url_for('dashboard.dashboard') }}" method="post" enctype="multipart/form-data" class="drop-area" id="drop-area">
+            <input type="file" id="file" name="file" accept=".pdf, .docx, .txt" multiple required class="file-input" hidden>
+            <div class="drop-container">
+                <img src="{{ url_for('static', filename='upload.png') }}" alt="Upload Icon" class="upload-icon">
+                <p>Drag & Drop <br> or <span class="browse-text">browse</span></p>
+                <small>Supports: PDF, DOCX, TXT</small>
+            </div>
             <button type="submit" class="upload-btn">Upload</button>
         </form>
-    </section>
+    </section>    
 
     <!-- Display Uploaded Documents as Cards -->
     <section class="files-section">
@@ -21,55 +35,11 @@
         {% if files_data %}
             <div class="cards-container">
                 {% for file in files_data %}
-                    <div class="card">
+                    <div class="card" data-details='{{ file | tojson }}'>
                         <h3>Parties</h3>
                         <p><strong>Licensor:</strong> {{ file.parties.licensor }}</p>
                         <p><strong>Licensee:</strong> {{ file.parties.licensee }}</p>
-
-                        <h3>Licensing Terms</h3>
-                        <p><strong>Effective Date:</strong> {{ file.licensing_terms.effective_date }}</p>
-                        <p><strong>Term Duration:</strong> {{ file.licensing_terms.term_duration }}</p>
-                        <p><strong>Scope of Use:</strong> {{ file.licensing_terms.scope_of_use | join(', ') }}</p>
-                        <p><strong>License Characteristics:</strong></p>
-                        <ul>
-                            <li><strong>Exclusivity:</strong> {{ file.licensing_terms.license_characteristics.exclusivity }}</li>
-                            <li><strong>Transferability:</strong> {{ file.licensing_terms.license_characteristics.transferability }}</li>
-                            <li><strong>Geographical Scope:</strong> {{ file.licensing_terms.license_characteristics.geographical_scope }}</li>
-                            <li><strong>User Access:</strong> {{ file.licensing_terms.license_characteristics.user_access }}</li>
-                        </ul>
-
-                        <h3>Financial Terms</h3>
-                        <p><strong>License Fee:</strong> {{ file.financial_terms.license_fee }}</p>
-                        <p><strong>Royalty Terms:</strong> {{ file.financial_terms.royalty_terms }}</p>
-
-                        <h3>Usage Restrictions</h3>
-                        <ul>
-                            {% for restriction in file.usage_restrictions.prohibited_uses %}
-                                <li>{{ restriction }}</li>
-                            {% endfor %}
-                        </ul>
-
-                        <h3>Intellectual Property</h3>
-                        <p><strong>Copyright Ownership:</strong> {{ file.intellectual_property.copyright_ownership }}</p>
-                        <p><strong>Attribution Requirements:</strong> {{ file.intellectual_property.attribution_requirements }}</p>
-
-                        <h3>Legal Compliance</h3>
-                        <p><strong>Third Party Rights:</strong> {{ file.legal_compliance.third_party_rights }}</p>
-                        <p><strong>Indemnification:</strong> {{ file.legal_compliance.indemnification }}</p>
-                        <p><strong>Liability Limitations:</strong> {{ file.legal_compliance.liability_limitations }}</p>
-
-                        <h3>Contract Termination</h3>
-                        <p><strong>Termination Grounds:</strong></p>
-                        <ul>
-                            {% for ground in file.contract_termination.termination_grounds %}
-                                <li>{{ ground }}</li>
-                            {% endfor %}
-                        </ul>
-                        <p><strong>Dispute Resolution:</strong></p>
-                        <ul>
-                            <li><strong>Governing Law:</strong> {{ file.contract_termination.dispute_resolution.governing_law }}</li>
-                            <li><strong>Resolution Mechanism:</strong> {{ file.contract_termination.dispute_resolution.resolution_mechanism }}</li>
-                        </ul>
+                        <button class="view-details-btn">View Details</button>
                     </div>
                 {% endfor %}
             </div>
@@ -78,4 +48,18 @@
         {% endif %}
     </section>
 </div>
+
+<!-- Modal Structure -->
+<div id="detailsModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <div id="modalBody">
+            <!-- Document details will be injected here -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 {% endblock %}

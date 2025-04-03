@@ -10,11 +10,16 @@
     <header>
         <nav class="navbar">
             <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link">Dashboard</a>
-            <a href="{{ url_for('auth.logout') }}" class="nav-link">Logout</a>
+            <a href="{{ url_for('auth.logout') }}" class="nav-link logout-btn">
+                <img src="{{ url_for('static', filename='image.png') }}" alt="Logout Icon" class="logout-icon">
+                Logout
+            </a>
         </nav>
     </header>
+    
     <main class="main-content">
         {% block content %}{% endblock %}
     </main>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -7,8 +7,15 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <div class="container">
-    <h1>Register</h1>
+
+<!-- Video Background -->
+<video autoplay loop muted playsinline id="bg-video">
+  <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+  <div class="login container">
+    <h1 class="login-tittle">Register</h1>
 
     <!-- Display flash messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -23,6 +30,9 @@
 
     <!-- Registration Form -->
     <form action="{{ url_for('auth.register') }}" method="post">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+
       <label for="email">Email:</label>
       <input type="text" id="email" name="email" required />
 

@@ -7,3 +7,6 @@ instance
 uploads
 .env
 old
+env
+features/contract_notifications.json
+features/__pycache__

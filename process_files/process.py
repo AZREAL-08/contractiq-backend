@@ -5,6 +5,8 @@ import json
 from datetime import datetime, date
 from pydantic import BaseModel, Field, ValidationError, field_validator
 from typing import List, Dict, Optional
+# Import our new notification module
+from email_notification import ContractNotificationManager
 
 
 def extract_text(loc):
@@ -51,6 +53,8 @@ class LicenseAgreementExtractor:
         genai.configure(api_key=api_key)
         # Use an appropriate model (using gemini-1.5-pro here)
         self.model = genai.GenerativeModel("gemini-1.5-pro")
+        # Initialize notification manager
+        self.notification_manager = ContractNotificationManager()
     
     def clean_response(self, text: str) -> str:
         """
@@ -156,7 +160,17 @@ CONTRACT TEXT TO ANALYZE:
             print(f"Data successfully saved to {filename}")
         except IOError as e:
             print(f"Error saving file: {e}")
-
+            
+    def schedule_notifications(self, data: Dict, email: str, contract_id: str = None):
+        """
+        Schedule email notifications for contract termination dates.
+        """
+        success = self.notification_manager.schedule_notifications(data, email, contract_id)
+        if success:
+            print(f"Notification scheduled successfully for {email}")
+        else:
+            print("Failed to schedule notification")
+        return success
 
 
 def gemini_call(contract_text):
@@ -169,13 +183,41 @@ def gemini_call(contract_text):
     extracted_details = extractor.extract_license_details(contract_text)
 
     if extracted_details:
-        return  extracted_details
+        return extracted_details
 
-def extract_data(loc):
+def extract_data(loc, user_email=None):
     contract_text = extract_text(loc)
-    extracted_data = gemini_call(contract_text)
-    print(extracted_data)
-    return extracted_data
+    API_KEY = os.environ['GEMINI_API']
+    extractor = LicenseAgreementExtractor(API_KEY)
+    
+    # Extract license details
+    extracted_data = extractor.extract_license_details(contract_text)
+    
+    if extracted_data:
+        # Generate a unique contract ID based on file path and timestamp
+        file_name = os.path.basename(loc)
+        contract_id = f"{file_name}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        
+        # Save the extracted data
+        extractor.save_to_json(extracted_data)
+        
+        # Schedule notifications if user email is provided
+        if user_email:
+            extractor.schedule_notifications(extracted_data, user_email, contract_id)
+        
+        print(extracted_data)
+        return extracted_data
+    return None
+
+# Function to check and send pending notifications
+def check_notifications():
+    notification_manager = ContractNotificationManager()
+    notification_manager.send_scheduled_notifications()
 
 if __name__ == '__main__':
-    extract_data('docs/DIGITAL LICENSING AGREEMENT.pdf')
+    # For testing: provide a user email
+    user_email = "user@example.com"
+    extract_data('docs/DIGITAL LICENSING AGREEMENT.pdf', user_email)
+    
+    # You can also manually check for pending notifications
+    # check_notifications()

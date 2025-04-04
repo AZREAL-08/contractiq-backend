@@ -28,8 +28,38 @@
             </div>
             <button type="submit" class="upload-btn">Upload</button>
         </form>
-    </section>    
+    </section>   
 
+    <!-- Summary Section: Total Files Uploaded -->
+    <section class="summary-section">
+        <div class="summary-card">
+            <h2>Total Uploaded Documents</h2>
+            <h2 class="file-count">{{ files_data|length }}</h2>
+        </div>
+    </section>
+
+    <div class="search-filter-controls">
+        <select id="fieldSelect">
+            <option value="all">All Fields</option>
+            <option value="licensor">Licensor</option>
+            <option value="licensee">Licensee</option>
+            <option value="scope_of_use">Scope of Use</option>
+            <option value="termination">Termination Grounds</option>
+            <option value="governing_law">Governing Law</option>
+        </select>
+    
+        <input type="text" id="searchInput" placeholder="Search keyword..." />
+    
+        <select id="sortSelect">
+            <option value="date_desc">Newest First</option>
+            <option value="date_asc">Oldest First</option>
+            <option value="licensor_asc">Licensor A-Z</option>
+            <option value="licensor_desc">Licensor Z-A</option>
+        </select>
+    </div>
+    
+
+    
     <!-- Display Uploaded Documents as Cards -->
     <section class="files-section">
         <h2>Your Uploaded Documents</h2>
@@ -50,17 +80,17 @@
     </section>
 </div>
 
+</div>
+
 <!-- Modal Structure -->
 <div id="detailsModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <span class="close-btn">&times;</span>
             <h2>Document Details</h2>
-            <!-- Export buttons in the header -->
             <div class="export-buttons">
                 <button id="modal-export-json-btn" class="export-btn">Export as JSON</button>
                 <button id="modal-export-csv-btn" class="export-btn">Export as CSV</button>
-                <!-- Optional: PDF export -->
                 <button id="modal-export-pdf-btn" class="export-btn">Export as PDF</button>
             </div>
         </div>

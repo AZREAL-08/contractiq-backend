@@ -171,6 +171,9 @@ form button:hover {
     margin: auto;
     border-radius: 10px;
     transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .drop-container:hover {
@@ -306,6 +309,118 @@ form button:hover {
     color: #000;
     text-decoration: none;
 }
+
+/* Export buttons */
+.export-buttons{
+    display: flex;
+    gap: 5px;
+}
+
+/*Display the number of docs uploaded*/
+.summary-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: max-content;
+}
+
+.file-count {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/*Progress bar and Showing the file uploading*/
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f9f9f9;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.file-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.file-name {
+    flex-grow: 1;
+    font-size: 0.9rem;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 8px;
+    width: 0%;
+    background: #007bff;
+    transition: width 0.3s;
+}
+
+/* Container for all filters (search, dropdowns) */
+.search-filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Dropdowns and Search Box */
+  .search-filter-controls select,
+  .search-filter-controls input[type="text"] {
+    padding: 0.6rem 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: white;
+    min-width: 180px;
+  }
+  
+  /* Focus effect for better accessibility */
+  .search-filter-controls select:focus,
+  .search-filter-controls input[type="text"]:focus {
+    border-color: #6366f1; /* indigo-500 */
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  }
+  
+  /* Responsive tweak for smaller screens */
+  @media (max-width: 768px) {
+    .search-filter-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .search-filter-controls select,
+    .search-filter-controls input[type="text"] {
+      width: 100%;
+    }
+  }
+  
+
 
   
   

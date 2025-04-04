@@ -26,6 +26,16 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 app.register_blueprint(auth_bp)
 app.register_blueprint(dashboard_bp)
 
+# Function to determine file icon based on extension
+def get_file_icon(filename):
+    ext = filename.split('.')[-1].lower()
+    icon_mapping = {
+        'pdf': 'pdf.png',
+        'docx': 'docx.png',
+        'txt': 'txt.png'
+    }
+    return icon_mapping.get(ext, 'file-icon.png')  # Default icon
+
 @app.route('/')
 def home():
     if 'user_id' in session:

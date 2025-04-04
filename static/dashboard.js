@@ -1,10 +1,79 @@
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     console.log("Dashboard JS loaded.");
 
     const dropArea = document.getElementById('drop-area');
     const dropContainer = document.querySelector('.drop-container');
     const fileInput = document.getElementById('file');
     const uploadBtn = document.querySelector('.upload-btn');
+    const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
+    const fieldSelect = document.getElementById("fieldSelect");
+
+    searchInput.addEventListener("input", filterAndSortCards);
+    sortSelect.addEventListener("change", filterAndSortCards);
+    fieldSelect.addEventListener("change", filterAndSortCards);
+
+    function filterAndSortCards() {
+        const keyword = searchInput.value.toLowerCase();
+        const sortOption = sortSelect.value;
+        const selectedField = fieldSelect.value;
+        const cards = Array.from(document.querySelectorAll(".card"));
+
+        cards.forEach(card => {
+            const data = JSON.parse(card.getAttribute("data-details"));
+            let contentToSearch = "";
+
+            if (selectedField === "all") {
+                contentToSearch = JSON.stringify(data).toLowerCase();
+            } else {
+                switch (selectedField) {
+                    case "licensor":
+                        contentToSearch = data.parties?.licensor?.toLowerCase() || "";
+                        break;
+                    case "licensee":
+                        contentToSearch = data.parties?.licensee?.toLowerCase() || "";
+                        break;
+                    case "scope_of_use":
+                        contentToSearch = (data.licensing_terms?.scope_of_use || []).join(" ").toLowerCase();
+                        break;
+                    case "termination":
+                        contentToSearch = (data.contract_termination?.termination_grounds || []).join(" ").toLowerCase();
+                        break;
+                    case "governing_law":
+                        contentToSearch = data.contract_termination?.dispute_resolution?.governing_law?.toLowerCase() || "";
+                        break;
+                    default:
+                        contentToSearch = "";
+                }
+            }
+
+            card.style.display = contentToSearch.includes(keyword) ? "block" : "none";
+        });
+
+        const visibleCards = cards.filter(card => card.style.display !== "none");
+
+        visibleCards.sort((a, b) => {
+            const dataA = JSON.parse(a.getAttribute("data-details"));
+            const dataB = JSON.parse(b.getAttribute("data-details"));
+
+            switch (sortOption) {
+                case "date_desc":
+                    return new Date(dataB.licensing_terms?.effective_date || 0) - new Date(dataA.licensing_terms?.effective_date || 0);
+                case "date_asc":
+                    return new Date(dataA.licensing_terms?.effective_date || 0) - new Date(dataB.licensing_terms?.effective_date || 0);
+                case "licensor_asc":
+                    return (dataA.parties?.licensor || "").localeCompare(dataB.parties?.licensor || "");
+                case "licensor_desc":
+                    return (dataB.parties?.licensor || "").localeCompare(dataA.parties?.licensor || "");
+                default:
+                    return 0;
+            }
+        });
+
+        const container = document.querySelector(".cards-container");
+        visibleCards.forEach(card => container.appendChild(card));
+    }
+
 
     // Prevent default drag behaviors on drop area and document
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -149,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
         addWrappedText("Resolution Mechanism", modalData.contract_termination?.dispute_resolution?.resolution_mechanism || "N/A");
         addWrappedText("Attribution Requirements", modalData.intellectual_property?.attribution_requirements || "N/A");
     
-        doc.save("exported_document.pdf");
+        doc.save("modal_exported_document.pdf");
     });
     
     

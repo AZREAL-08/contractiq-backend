@@ -1,0 +1,112 @@
+{
+    "T6KWe1wp3tvRnRONUuFU_20250404232604": {
+        "recipient_email": "pbhat344@gmail.com",
+        "contract_name": "Acme Content Inc. - Beta Media Corp.",
+        "termination_date": "2024-10-27",
+        "notifications": [
+            {
+                "days_before": 1,
+                "notification_date": "2024-10-26",
+                "sent": true
+            },
+            {
+                "days_before": 3,
+                "notification_date": "2024-10-24",
+                "sent": true
+            },
+            {
+                "days_before": 5,
+                "notification_date": "2024-10-22",
+                "sent": true
+            }
+        ]
+    },
+    "T6KWe1wp3tvRnRONUuFU_20250404232839": {
+        "recipient_email": "pbhat344@gmail.com",
+        "contract_name": "Acme Content Inc. - Beta Media Corp.",
+        "termination_date": "2024-10-27",
+        "notifications": [
+            {
+                "days_before": 1,
+                "notification_date": "2024-10-26",
+                "sent": true
+            },
+            {
+                "days_before": 3,
+                "notification_date": "2024-10-24",
+                "sent": true
+            },
+            {
+                "days_before": 5,
+                "notification_date": "2024-10-22",
+                "sent": true
+            }
+        ]
+    },
+    "T6KWe1wp3tvRnRONUuFU_20250404233148": {
+        "recipient_email": "pbhat344@gmail.com",
+        "contract_name": "Acme Content Inc. - Beta Media Corp.",
+        "termination_date": "2024-10-27",
+        "notifications": [
+            {
+                "days_before": 1,
+                "notification_date": "2024-10-26",
+                "sent": true
+            },
+            {
+                "days_before": 3,
+                "notification_date": "2024-10-24",
+                "sent": true
+            },
+            {
+                "days_before": 5,
+                "notification_date": "2024-10-22",
+                "sent": true
+            }
+        ]
+    },
+    "T6KWe1wp3tvRnRONUuFU_20250404234306": {
+        "recipient_email": "pbhat344@gmail.com",
+        "contract_name": "Acme Content Inc. - Beta Media Corp.",
+        "termination_date": "2024-10-27",
+        "notifications": [
+            {
+                "days_before": 1,
+                "notification_date": "2024-10-26",
+                "sent": true
+            },
+            {
+                "days_before": 3,
+                "notification_date": "2024-10-24",
+                "sent": true
+            },
+            {
+                "days_before": 5,
+                "notification_date": "2024-10-22",
+                "sent": true
+            }
+        ]
+    },
+    "T6KWe1wp3tvRnRONUuFU_20250404235210": {
+        "recipient_email": "pbhat344@gmail.com",
+        "contract_name": "Acme Content Inc. - Beta Media Corp.",
+        "termination_date": "2024-10-27",
+        "notifications": [
+            {
+                "days_before": 1,
+                "notification_date": "2024-10-26",
+                "sent": true
+            },
+            {
+                "days_before": 3,
+                "notification_date": "2024-10-24",
+                "sent": true
+            },
+            {
+                "days_before": 5,
+                "notification_date": "2024-10-22",
+                "sent": true
+            }
+        ]
+    }
+}

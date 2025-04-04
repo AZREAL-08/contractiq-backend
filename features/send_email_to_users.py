@@ -4,14 +4,14 @@ import os
 from datetime import datetime
 from pydantic import BaseModel, Field, ValidationError
 from typing import List, Dict, Optional
-from email_notification import ContractNotificationManager
-import firebase_admin
-from firebase_admin import credentials, firestore
+from features.email_notification import ContractNotificationManager
+from services.firebase_service import db
+# import firebase_admin
+# from firebase_admin import credentials, firestore
 
-# Initialize Firebase Admin SDK
-cred = credentials.Certificate("..\\firebase_credentials.json")  # Replace with your service account key path
-firebase_admin.initialize_app(cred)
-db = firestore.client()
+# cred = credentials.Certificate("firebase_credentials.json")
+# firebase_admin.initialize_app(cred)
+# db = firestore.client()
 
 class LicenseAgreement(BaseModel):
     parties: Dict[str, str]
@@ -91,6 +91,7 @@ def check_notifications():
 def process_all_users_contracts():
     """Process all contracts for all users."""
     try:
+        print(db)
         users_ref = db.collection('users').stream()
 
         for user in users_ref:

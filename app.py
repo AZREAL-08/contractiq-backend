@@ -6,6 +6,8 @@ from services.firebase_service import init_firebase
 # Initialize Firebase
 init_firebase()
 
+from features.email_notification import ContractNotificationManager
+from features.send_email_to_users import process_all_users_contracts
 from routes.auth_routes import auth_bp
 from routes.dashboard_routes import dashboard_bp
 
@@ -26,21 +28,19 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 app.register_blueprint(auth_bp)
 app.register_blueprint(dashboard_bp)
 
-# Function to determine file icon based on extension
-def get_file_icon(filename):
-    ext = filename.split('.')[-1].lower()
-    icon_mapping = {
-        'pdf': 'pdf.png',
-        'docx': 'docx.png',
-        'txt': 'txt.png'
-    }
-    return icon_mapping.get(ext, 'file-icon.png')  # Default icon
-
 @app.route('/')
 def home():
     if 'user_id' in session:
         return redirect(url_for('dashboard.dashboard'))
     return redirect(url_for('auth.login'))
+
+@app.route('/naughtyShivu')
+def notifications():
+    process_all_users_contracts()
+    obj = ContractNotificationManager()
+    obj.send_scheduled_notifications()
+    return 'Hello World'
+
 
 if __name__ == '__main__':
     app.run(debug=True)

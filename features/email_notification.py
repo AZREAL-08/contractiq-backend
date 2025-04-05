@@ -18,7 +18,7 @@ class ContractNotificationManager:
         self.smtp_port = smtp_port
         self.sender_email = os.environ.get('NOTIFICATION_EMAIL', '')
         self.sender_password = os.environ.get('NOTIFICATION_PASSWORD', '')
-        
+        print(self.sender_email, self.sender_password)
         # Days before expiration to send notifications
         self.notification_days = [1, 3, 5]
         

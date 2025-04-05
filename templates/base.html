@@ -10,11 +10,14 @@
 <body>
     <header>
         <nav class="navbar">
-            <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link">Dashboard</a>
-            <a href="{{ url_for('auth.logout') }}" class="nav-link logout-btn">
-                <img src="{{ url_for('static', filename='image.png') }}" alt="Logout Icon" class="logout-icon">
-                Logout
-            </a>
+            <img class="navbar-logo" src="{{ url_for('static', filename='LazyMonks-WB.png')}}" alt="LazyMonks">
+            <div class="nav-links-container">
+                <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link">Dashboard</a>
+                <a href="{{ url_for('auth.logout') }}" class="nav-link logout-btn">
+                    <img src="{{ url_for('static', filename='logout.png') }}" alt="Logout Icon" class="logout-icon">
+                    Logout
+                </a>
+            </div>
         </nav>
     </header>
     

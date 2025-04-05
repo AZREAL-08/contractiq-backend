@@ -63,7 +63,6 @@ def extract_data_from_firebase(user_id, document_id):
 
                     extractor = LicenseAgreementExtractor()
                     extractor.schedule_notifications(validated_data, user_email, contract_id)
-                    print(validated_data)
                     return validated_data
 
                 except ValidationError as ve:

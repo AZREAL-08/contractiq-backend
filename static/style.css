@@ -72,17 +72,26 @@ form button:hover {
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
-    background-color: #ffe600;
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+}
+
+.nav-links-container{
+    display: flex;
 }
 
 .nav-link {
     text-decoration: none;
     color: rgb(8, 8, 8);
-    font-size: 18px;
+    font-size: 20px;
     padding: 10px;
     display: flex;
     align-items: center;
     gap: 8px; /* Space between icon and text */
+}
+
+.navbar-logo{
+    height: 70px;
+    width: auto;
 }
 
 .logout-btn {
@@ -419,7 +428,50 @@ form button:hover {
       width: 100%;
     }
   }
-  
+
+  /*Uploading file and progress bar*/
+  .uploaded-files-section {
+    margin-top: 20px;
+}
+
+.files-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.file-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    width: max-content;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.file-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.progress-bar {
+    width: 50%;
+    height: 5px;
+    background: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: green;
+    transition: width 0.3s ease-in-out;
+}
+
 
 
   

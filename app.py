@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask_cors import cross_origin
 from dotenv import load_dotenv
 import os
 from services.firebase_service import init_firebase
@@ -34,12 +35,18 @@ def home():
         return redirect(url_for('dashboard.dashboard'))
     return redirect(url_for('auth.login'))
 
-@app.route('/naughtyShivu')
+@app.route('/notifications123', methods=["GET"])
+@cross_origin()  # Allow cross-origin requests
 def notifications():
-    process_all_users_contracts()
-    obj = ContractNotificationManager()
-    obj.send_scheduled_notifications()
-    return 'Hello World'
+    try:
+        process_all_users_contracts()
+        obj = ContractNotificationManager()
+        obj.send_scheduled_notifications()
+        return jsonify({"message": "Notifications processed successfully", "status": "success"})
+    except Exception as e:
+        # Log the error as needed
+        return jsonify({"message": f"Error processing notifications: {str(e)}", "status": "error"}), 500
+
 
 
 if __name__ == '__main__':

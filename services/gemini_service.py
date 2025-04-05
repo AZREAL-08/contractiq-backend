@@ -70,69 +70,67 @@ class LicenseAgreementExtractor:
         using advanced NLP techniques.
         """
         prompt = f"""You are an expert legal NLP assistant specializing in parsing content licensing agreements.
+        
+    - Please analyze the following contract text and extract precise, concise, and structured details according to the schema below. 
+    - Your output must be in valid JSON format, with no null values (use "N/A" where information is missing)
+    - With dates formatted in ISO format (YYYY-MM-DD). 
+    - If any details are ambiguous or missing, use logical inference to fill the gaps. 
+    - Reread your output to ensure consistency, completeness, and correctness.
 
-EXTRACTION INSTRUCTIONS:
-- Extract precise, concise information for each specified category.
-- If information is not found, use "N/A", refrain from returning Null.
-- Ensure JSON output is clean and standardized.
-- Try to fill in the gaps if any from inference
-- Reread your output to make sense or find gaps
-- Strictly adhere to this format no matter what.
+    EXTRACTION CATEGORIES:
+    1. PARTIES INVOLVED
+    2. LICENSING TERMS
+    3. PAYMENT & FEES
+    4. USAGE RESTRICTIONS
+    5. INTELLECTUAL PROPERTY
+    6. LEGAL COMPLIANCE
+    7. TERMINATION & DISPUTE RESOLUTION
 
-EXTRACTION CATEGORIES:
-1. PARTIES INVOLVED
-2. LICENSING TERMS
-3. PAYMENT & FEES
-4. USAGE RESTRICTIONS
-5. INTELLECTUAL PROPERTY
-6. LEGAL COMPLIANCE
-7. TERMINATION & DISPUTE RESOLUTION
-
-DETAILED EXTRACTION SCHEMA:
-{{
-    "parties": {{
-        "licensor": "Full legal name of content owner",
-        "licensee": "Full legal name of rights recipient"
-    }},
-    "licensing_terms": {{
-        "effective_date": "Exact date license begins",
-        "term_duration": "License period (e.g., '12 months')",
-        "scope_of_use": ["List of allowed usage contexts"],
-        "license_characteristics": {{
-            "exclusivity": "Exclusive/Non-Exclusive",
-            "transferability": "Transferable/Non-Transferable",
-            "geographical_scope": "Regions covered",
-            "user_access": "Single/Multi-User"
-        }}
-    }},
-    "financial_terms": {{
-        "license_fee": "Total amount payable",
-        "royalty_terms": "Details of ongoing payments"
-    }},
-    "usage_restrictions": {{
-        "prohibited_uses": ["List of explicitly forbidden uses"]
-    }},
-    "intellectual_property": {{
-        "copyright_ownership": "Description of IP rights",
-        "attribution_requirements": "Credit/acknowledgment details"
-    }},
-    "legal_compliance": {{
-        "third_party_rights": "Required releases or permissions",
-        "indemnification": "Liability assignment details",
-        "liability_limitations": "Scope of licensor's responsibilities"
-    }},
-    "contract_termination": {{
-        "termination_grounds": ["List of license revocation conditions"],
-        "dispute_resolution": {{
-            "governing_law": "Jurisdiction for legal matters",
-            "resolution_mechanism": "Method of resolving disputes"
+    SCHEMA FORMAT (strictly adhere to this):
+    {{
+        "parties": {{
+            "licensor": "Full legal name of content owner",
+            "licensee": "Full legal name of rights recipient"
+        }},
+        "licensing_terms": {{
+            "effective_date": "Exact date license begins in YYYY-MM-DD format",
+            "term_duration": "License period (e.g., '12 months', '2 years', or 'until YYYY-MM-DD')",
+            "scope_of_use": ["List of allowed usage contexts"],
+            "license_characteristics": {{
+                "exclusivity": "Exclusive/Non-Exclusive",
+                "transferability": "Transferable/Non-Transferable",
+                "geographical_scope": "Regions covered",
+                "user_access": "Single/Multi-User"
+            }}
+        }},
+        "financial_terms": {{
+            "license_fee": "Total amount payable",
+            "royalty_terms": "Details of ongoing payments"
+        }},
+        "usage_restrictions": {{
+            "prohibited_uses": ["List of explicitly forbidden uses"]
+        }},
+        "intellectual_property": {{
+            "copyright_ownership": "Description of IP rights",
+            "attribution_requirements": "Credit/acknowledgment details"
+        }},
+        "legal_compliance": {{
+            "third_party_rights": "Required releases or permissions",
+            "indemnification": "Liability assignment details",
+            "liability_limitations": "Scope of licensor's responsibilities"
+        }},
+        "contract_termination": {{
+            "termination_grounds": ["List of license revocation conditions"],
+            "dispute_resolution": {{
+                "governing_law": "Jurisdiction for legal matters",
+                "resolution_mechanism": "Method of resolving disputes"
+            }}
         }}
     }}
-}}
 
-CONTRACT TEXT TO ANALYZE:
-{contract_text}
-"""
+    CONTRACT TEXT TO ANALYZE:
+    {contract_text}
+    """
         try:
             response = self.model.generate_content(prompt)
             raw_output = response.text.strip()

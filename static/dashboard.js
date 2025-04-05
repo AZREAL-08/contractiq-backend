@@ -306,4 +306,66 @@
         html += `</ul>`;
         return html;
     }
+    /*this is progress bar and uploading docx*/
+    const uploadedFilesContainer = document.getElementById("uploaded-files-container");
+
+    fileInput.addEventListener("change", function () {
+        const files = fileInput.files;
+        for (let file of files) {
+            console.log(file);
+            addFileCard(file);
+            simulateUploadProgress(file.name);
+        }
+    });
+
+    function addFileCard(file) {
+        const fileCard = document.createElement("div");
+        fileCard.classList.add("file-card");
+
+        const fileIcon = document.createElement("img");
+        fileIcon.src = getFileIcon(file.name);
+        fileIcon.alt = "File Icon";
+        fileIcon.classList.add("file-icon");
+
+        const fileName = document.createElement("p");
+        fileName.innerText = file.name;
+
+        const progressBar = document.createElement("div");
+        progressBar.classList.add("progress-bar");
+
+        const progressFill = document.createElement("div");
+        progressFill.classList.add("progress-fill");
+        progressBar.appendChild(progressFill);
+
+        fileCard.appendChild(fileIcon);
+        fileCard.appendChild(fileName);
+        fileCard.appendChild(progressBar);
+
+        uploadedFilesContainer.appendChild(fileCard);
+    }
+
+    function simulateUploadProgress(fileName) {
+        const progressBar = [...document.querySelectorAll(".file-card p")].find(el => el.innerText === fileName).nextElementSibling;
+        const progressFill = progressBar.querySelector(".progress-fill");
+        let progress = 0;
+
+        const interval = setInterval(() => {
+            progress += 10;
+            progressFill.style.width = progress + "%";
+            if (progress >= 100) {
+                clearInterval(interval);
+            }
+        }, 300);
+    }
+
+    function getFileIcon(filename) {
+        const ext = filename.split(".").pop().toLowerCase();
+        const icons = {
+            pdf: "static/pdf.png",
+            docx: "static/docx.png",
+            txt: "static/txt.png"
+        };
+        return icons[ext] || "static/file.png";
+    }
 });
+

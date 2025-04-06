@@ -18,7 +18,6 @@ class ContractNotificationManager:
         self.smtp_port = smtp_port
         self.sender_email = os.environ.get('NOTIFICATION_EMAIL', '')
         self.sender_password = os.environ.get('NOTIFICATION_PASSWORD', '')
-        print(self.sender_email, self.sender_password)
         # Days before expiration to send notifications
         self.notification_days = [1, 3, 5]
         
@@ -184,7 +183,7 @@ class ContractNotificationManager:
         for contract_id, contract_info in self.notifications.items():
             for notification in contract_info["notifications"]:
                 # Check if notification date is today OR in the past AND not sent.
-                if notification["notification_date"] <= today and not notification["sent"]:
+                if notification["notification_date"] == today and not notification["sent"]:
                     # Send notification
                     success = self._send_notification_email(
                         contract_info["recipient_email"],

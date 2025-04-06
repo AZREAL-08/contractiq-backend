@@ -1,10 +1,10 @@
-📝 **Contract Intelligence Platform**
+##📝 Contract Intelligence Platform
 
 An AI-powered platform for intelligent contract analysis, entity extraction, clause classification, and semantic search. Designed to streamline legal workflows, reduce manual review time, and improve contract visibility and risk management.
 
 ---
 
-🚀 **Features**
+#🚀 **Features**
 
 - **Custom Entity Extraction Model**  
   Leveraging advanced NLP and Gemini API to identify domain-specific terms and entities in contracts.
@@ -26,7 +26,7 @@ An AI-powered platform for intelligent contract analysis, entity extraction, cla
 
 ---
 
-🛠️ **Tech Stack**
+#🛠️ **Tech Stack**
 
 - **Backend:** Flask (Python)  
 - **Frontend:** HTML, CSS, JavaScript  
@@ -38,7 +38,7 @@ An AI-powered platform for intelligent contract analysis, entity extraction, cla
 
 ---
 
- 🧠 **AI Capabilities**
+ #🧠 **AI Capabilities**
 
 - Named Entity Recognition (NER) for legal terms  
 - Clause-level classification and similarity detection  
